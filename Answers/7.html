@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Portfolio</title>
+</head>
+<body>
+    
+    <!-- 7. Что такое делегирование в JS? -->
+
+    <!-- Делегирование, или делегирование событий - это приём, позволяющий оптимизировать
+    работу интерфейса засчёт того, что мы вешаем обработчик для схожих событий
+    не на каждый из множества однотипных элементов,
+    а на их родительский контейнер, или кого-то ещё из "предков".
+    Это возможно благодаря во первых - способности событий "всплывать"
+    от объекта HTML элемента который его вызвал наверх по цепочке родителей
+    пока событие не достигнет document, и во вторых - благодаря тому, что каждый
+    объект события хранит ссылку на event.target - тот самый элемент, на котором
+    событие первоначально произошло -->
+
+    <div class="container">
+        <nav>
+            <a href="#" class="main-logo">
+                <img src="#" alt="Company logo" class="main-logo__image">
+            </a>
+            <ul class="main-nav">
+                <li class="main-nav__item"><a href="#" class="main-nav__link">Главная</a></li>
+                <li class="main-nav__item"><a href="#" class="main-nav__link main-nav__link--active">Портфолио</a></li>
+                <li class="main-nav__item"><a href="#" class="main-nav__link">Услуги</a></li>
+                <li class="main-nav__item"><a href="#" class="main-nav__link">О нас</a></li>
+                <li class="main-nav__item"><a href="#" class="main-nav__link">Контакты</a></li>
+            </ul>
+        </nav>
+    </div>
+    
+    <script>
+
+        (function(/*someGlobalVariable*/) {
+            'use strict';
+
+            const PORTFOLIO_CONFIGURATION = {
+                CLASS_NAMES: {
+                    CONTAINER: 'container',
+                    MAIN_LOGO_LINK: 'main-logo',
+                    MAIN_NAV: 'main-nav',
+                    MAIN_NAV_LINK: 'main-nav__link',
+                }
+            };
+
+            const CACHED_CLASS_NAMES = PORTFOLIO_CONFIGURATION.CLASS_NAMES;
+            console.log(CACHED_CLASS_NAMES);
+
+            let pageContainer = document.querySelector('.' + CACHED_CLASS_NAMES.CONTAINER);
+
+            if (!pageContainer) {
+                console.warn('There is no .container on page!');
+                return;
+            }
+
+            let logoMainLink = pageContainer.querySelector('.' + CACHED_CLASS_NAMES.LOGO_MAIN_LINK);
+            let mainNav = pageContainer.querySelector('.' + CACHED_CLASS_NAMES.MAIN_NAV);
+
+            if (!mainNav) {
+                console.warn('There is no .main-nav on page!');
+                return;
+            }
+            
+            // вешаем обработчики на элемент списка UL
+            mainNav.addEventListener('click', mainNavLinkClickHandler);
+            mainNav.addEventListener('keydown', mainNavLinkKeydownHandler);
+
+            function mainNavLinkClickHandler(evt) {
+                mainNavLinkHandler(evt);
+            }
+
+            function mainNavLinkKeydownHandler(evt) {
+                if ([13, 32].indexOf(evt.keyCode) > -1) {
+                    mainNavLinkHandler(evt);
+                }
+            }
+
+            function mainNavLinkHandler(evt) {
+                // проверяем, является ли элемент, по которому кликнули - навигационной ссылкой
+                if (evt.target.classList.contains(CACHED_CLASS_NAMES.MAIN_NAV_LINK)) {
+                    // если да, то выполняем некоторое кастомное действие
+                    evt.preventDefault();
+                    customMenuAction(evt.target);
+                }
+            }
+
+            function customMenuAction(target) {
+                console.log(target.textContent + ' is clicked!');
+            }
+
+
+        })(/*SOME_GLOBAL_VARIABLE*/);
+
+    </script>
+</body>
+</html>
+
+
